@@ -32,6 +32,8 @@ def read_page(url: str) -> str:
     """Read a webpage."""
     html = requests.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"}).text
     return (trafilatura.extract(html) or "")[:4000]
+import crewai.llms.cache as _crewai_cache
+_crewai_cache.mark_cache_breakpoint = lambda msg: msg
 
 llm = LLM(model=MODEL, temperature=0.4)
 
