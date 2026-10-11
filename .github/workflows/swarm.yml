@@ -1,0 +1,28 @@
+name: Nightly Swarm
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt
+      - run: python swarm.py
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GMAIL_ADDR: ${{ secrets.GMAIL_ADDR }}
+          GMAIL_APP_PW: ${{ secrets.GMAIL_APP_PW }}
+      - name: Save report
+        run: |
+          git config user.name "swarm-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add docs/
+          git commit -m "report" || echo "nothing"
+          git push
