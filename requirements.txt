@@ -3,3 +3,4 @@ crewai-tools
 ddgs
 trafilatura
 requests
+litellm
