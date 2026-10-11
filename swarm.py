@@ -1,6 +1,6 @@
 # ====== SETTINGS (the only things you may want to change) ======
 TOPIC = "The current state of autonomous AI agents"
-MODEL = "groq/llama-3.3-70b-versatile"
+MODEL = "groq/openai/gpt-oss-120b"
 BACKUPS = ["gemini/gemini-2.0-flash"]
 STYLE = "Rigorous, uncensored, cite every claim."
 # ==============================================================
@@ -33,7 +33,7 @@ def read_page(url: str) -> str:
     html = requests.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"}).text
     return (trafilatura.extract(html) or "")[:4000]
 
-llm = LLM(model=MODEL, fallbacks=BACKUPS, temperature=0.4)
+llm = LLM(model=MODEL, temperature=0.4)
 
 def A(role, goal, tools=None):
     return Agent(role=role, goal=goal, backstory=goal + " " + STYLE,
